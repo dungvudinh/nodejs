@@ -9282,8 +9282,3 @@ textarea.form-control-lg {
     display: inline-flex !important; }
   .d-print-none {
     display: none !important; } }
-
-h1, .h1 {
-  color: blue;
-  background-color: red;
-  padding-left: 100px; }

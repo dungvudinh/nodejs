@@ -1,0 +1,19 @@
+<form class="container col-4 mt-3" method="POST" action="/courses/store" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="" class="form-label">Title</label>
+    <input type="text" class="form-control" name="title">
+  </div>
+  <div class="mb-3">
+    <label  class="form-label">Description</label>
+    <input type="text" class="form-control" name="desc">
+  </div>
+    <div class="mb-3 ">
+    <label class="form-label" >Video ID</label>
+    <input type="text" class="form-control" name="video_id">
+  </div>
+   <div class="mb-3">
+    <label  class="form-label">Choose Image</label>
+    <input type="file" class="form-control" name="image_url" >
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>

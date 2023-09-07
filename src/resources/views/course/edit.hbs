@@ -1,0 +1,28 @@
+<form class="container col-4 mt-3 d-flex flex-column " method="POST" action="/courses/{{course._id}}?_method=PUT" enctype="multipart/form-data">
+  <div class="mb-3">
+    <label for="" class="form-label">Title</label>
+    <input type="text" class="form-control" name="title" value="{{course.title}}">
+  </div>
+  <div class="mb-3">
+    <label  class="form-label">Description</label>
+    <input type="text" class="form-control" name="desc" value="{{course.desc}}">
+  </div>
+    <div class="mb-3 ">
+    <label class="form-label" >Video ID</label>
+    <input type="text" class="form-control" name="video_id" value="{{course.video_id}}">
+  </div>
+   <div class="mb-3  d-flex flex-column justify-content-center align-items-center">
+    <label  class="form-label" for="image-input">
+      <i class="fa-solid fa-hand-pointer"></i>
+      Choose Image
+    </label>
+    <img src="http://localhost:3001/uploads/{{course.image_url}}" alt="" width="200" class="image mb-2">
+    <input type="text" name="old_image" style="display:none" value="{{course.image_url}}"/>
+    <input type="file" class="form-control" name="image_url" style="display:none" id="image-input" >
+  </div>
+  <button type="submit" class="btn btn-primary ">Submit</button>
+</form>
+<script src="/js/editCourse.js"></script>
+
+
+

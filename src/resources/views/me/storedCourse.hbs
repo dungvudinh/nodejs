@@ -1,0 +1,137 @@
+<form class="container d-flex justify-content-center" method="POST" action="/courses/handle-form-actions">
+    <div class="content col-8  mt-3">
+        {{#if courses}}
+        <h2 class="mb-3">Khóa học của tôi</h2>
+        {{#if countDocument}}
+            <a href="/me/trash/courses" style="text-decoration:none;"><i class="fa-solid fa-trash me-2"></i>Thùng rác ({{countDocument}})</a>
+        {{/if}}
+       
+        <div class="check-box d-flex flex-direction-column align-items-center mb-4">
+             <div class="col-3 ms-2">
+                <select class="form-select" aria-label="Default select example" name="action" required>
+                    <option value="" selected>Chọn hành động</option>
+                    <option value="delete" >Xóa</option>    
+                </select>
+            </div>
+            <button class="btn btn-primary ms-2 submit-btn" type="submit" disabled>Thực hiện</button>
+        </div>
+      
+        <table class="table">
+            <thead>
+                <tr>
+                     <th scope="col">
+                         <input type="checkbox" class="form-check-input select-all_item me-2" > 
+                     </th>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each courses}}
+                    <tr>
+                        <th>
+                             <input type="checkbox" class="form-check-input select-course me-2" name="courseIds" value="{{this._id}}">   
+                        </th>
+                        <th scope="row" >{{sum @index 1}}</th>
+                        <td>{{this.title}}</td>
+                        <td>{{this.desc}}</td>
+                        <td>{{timeFormat this.createdAt}}</td>
+                        <td class="d-flex flex-row">
+                            <a href="/courses/{{this._id}}/edit">
+                                <button type="button" class="btn btn-primary me-2 d-flex flex-row align-items-center">
+                                    <i class="fa-regular fa-pen-to-square me-2"></i>
+                                    Edit
+                                </button>
+                            </a>
+                            <button type="button" class="btn btn-danger d-flex flex-row align-items-center" data-bs-target="#delete-confirm_modal"
+                            data-bs-toggle="modal" data-bs-whatever="{{dataWhatever this.title this._id}}">
+                                <i class="fa-solid fa-delete-left me-2"></i>
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                {{/each}}
+                {{else}}
+                    <tr>
+                        <td colspan="5" class="text-center">Bạn không có khóa học nào.Bạn có thể 
+                            <a href="/courses/create">Đăng khóa học</a> hoặc khôi phục từ <a href="/me/trash/courses">
+                               Thùng rác
+                            </a>
+                        </td>
+                    </tr>
+            </tbody>
+        </table>
+        {{/if}}
+    </div>
+</form>
+
+  {{!-- delete  confirm --}}
+<div class="modal fade" id="delete-confirm_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary delete-confirm_btn">Yes</button>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        </div>
+        </div>
+    </div>
+</div>
+{{!-- delete course form --}}
+<form method="POST" class="delete-course_form d-none"></form>
+<script>
+    var deleteConfirmModal = document.getElementById('delete-confirm_modal')
+    var deleteCourseForm = document.querySelector('.delete-course_form');
+    var courseId; 
+    deleteConfirmModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+        var recipient = button.getAttribute('data-bs-whatever')
+        var objectData = JSON.parse(recipient);
+       
+        var modalBody = deleteConfirmModal.querySelector('.modal-body p');
+        modalBody.textContent = objectData.title;
+        courseId = objectData.id;
+    })
+    const deleteConfirmBtn = deleteConfirmModal.querySelector('.delete-confirm_btn');
+    deleteConfirmBtn.onclick = (e)=>
+    {
+        deleteCourseForm.action = `/courses/${courseId}?_method=DELETE`;
+        deleteCourseForm.submit();
+    }
+
+    //handle checkbox 
+    const selectCourseInputs = document.querySelectorAll(".select-course");
+    const submitBtn  = document.querySelector(".submit-btn");
+    const selectAllItemElm = document.querySelector(".select-all_item");
+
+     selectAllItemElm.onchange = (e)=> {
+        selectCourseInputs.forEach(input=>input.checked = e.target.checked);
+        handleShowDeleteBtn();
+    };
+
+    selectCourseInputs.forEach(input=>{
+        input.onchange = (e)=>{
+            var isCheckedAll = selectCourseInputs.length  == document.querySelectorAll("input[name='courseIds']:checked").length;
+            selectAllItemElm.checked = isCheckedAll;
+            handleShowDeleteBtn();
+        }
+    })
+    const handleShowDeleteBtn = ()=>
+    {
+        const countCheck = document.querySelectorAll("input[name='courseIds']:checked").length;
+        if(countCheck > 0)
+            submitBtn.removeAttribute('disabled');
+        else
+             submitBtn.setAttribute('disabled', true);
+    }
+   
+</script>

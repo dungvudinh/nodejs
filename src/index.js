@@ -7,27 +7,19 @@ const port = 3001;
 const route = require('./routes');
 const db = require('./config/db');
 const methodOverride = require('method-override');
+const sortMiddleware =  require('./app/middlewares/sortMiddleware');
 db.connect();
 app.use(morgan('combined'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(sortMiddleware);
 app.engine(
     '.hbs',
     engine({
         extname: '.hbs',
-        helpers: {
-            sum(a, b) {
-                return a + b;
-            },
-            timeFormat(timestamp) {
-                return `${timestamp.getHours()}:${timestamp.getMinutes()} - ${timestamp.getDate()}/${timestamp.getMonth()}/${timestamp.getFullYear()}`;
-            },
-            dataWhatever(title, id) {
-                return JSON.stringify({ title, id });
-            },
-        },
+        helpers: require('./helpers/handlebars')
     }),
 );
 app.set('view engine', 'hbs');

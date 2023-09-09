@@ -23,9 +23,18 @@
                          <input type="checkbox" class="form-check-input select-all_item me-2" > 
                      </th>
                     <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">Created At</th>
+                    <th scope="col">
+                        Title
+                        {{{sortable 'title' _sort}}}
+                    </th>
+                    <th scope="col">
+                        Description
+                         {{{sortable 'desc' _sort}}}
+                    </th>
+                    <th scope="col">
+                        Created At
+                         {{{sortable 'createdAt' _sort}}}
+                    </th>
                     <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -35,7 +44,7 @@
                         <th>
                              <input type="checkbox" class="form-check-input select-course me-2" name="courseIds" value="{{this._id}}">   
                         </th>
-                        <th scope="row" >{{sum @index 1}}</th>
+                        <th scope="row" >{{this._id}}</th>
                         <td>{{this.title}}</td>
                         <td>{{this.desc}}</td>
                         <td>{{timeFormat this.createdAt}}</td>

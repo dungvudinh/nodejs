@@ -7,8 +7,8 @@ class MeController {
             const countDocument = await Course.countWithDeleted({
                 deleted: true,
             });
-            const courses = await Course.find({}).lean();
-            res.render('me/storedCourse', { courses, countDocument });
+            let courses = await Course.find({}).sortable(req).lean();
+            res.render('me/storedCourse', { courses,  countDocument });
         } catch (error) {
             next(error);
         }

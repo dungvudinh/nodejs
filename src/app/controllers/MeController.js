@@ -8,7 +8,7 @@ class MeController {
                 deleted: true,
             });
             let courses = await Course.find({}).sortable(req).lean();
-            res.render('me/storedCourse', { courses,  countDocument });
+            res.render('me/storedCourse', { courses, countDocument });
         } catch (error) {
             next(error);
         }

@@ -1,14 +1,54 @@
 <div class="content col-3">
-    <form class="" method="POST">
+  <h3>Đăng nhập</h3>
+    <form class="login-form" method="POST">
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Email</label>
     <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
+    <span class="email-message text-danger"></span>
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Password</label>
     <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+    <span class="password-message text-danger"></span>
   </div>
   
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
+
+<script>
+  const form = document.querySelector('.login-form');
+  const EmailMsg = document.querySelector('.email-message');
+  const PassMsg = document.querySelector('.password-message');
+
+  form.addEventListener('submit', async (e)=>
+  {
+    EmailMsg.textContent = '';
+    PassMsg.textContent = '';
+
+    e.preventDefault();
+    const email = form.email.value;
+    const password = form.password.value;
+    try 
+    {
+      const res  = await fetch('/login', {
+        method:'POST', 
+        body:JSON.stringify({email, password}), 
+        headers:{'Content-Type': 'application/json'}
+      })
+      const data = await res.json();
+      console.log(data);
+      if(data.errors)
+      {
+        EmailMsg.textContent = data.errors.email;
+        PassMsg.textContent = data.errors.password;
+      }
+      if(data.user)
+        location.assign('/');
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+  })
+</script>

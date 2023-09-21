@@ -33,28 +33,24 @@ module.exports = {
         </a>`;
         return new Handlebars.SafeString(result);
     },
-    renderPage(count, currentPage)
-    {
+    renderPage(count, currentPage) {
         var result = '';
-        const page = Math.ceil(count/8);
+        const page = Math.ceil(count / 8);
 
-        if(page > 1)
-        {
-            var  showPage = '';
-            for(let i = 0; i< page; i++)
-                {
-                   showPage += `<li class="page-item"><a class="page-link" href="?page=${i+1}">${i+1}</a></li>`;
-                }
-            if(page  ==1)
-            {
+        if (page > 1) {
+            var showPage = '';
+            for (let i = 0; i < page; i++) {
+                showPage += `<li class="page-item"><a class="page-link" href="?page=${
+                    i + 1
+                }">${i + 1}</a></li>`;
+            }
+            if (page == 1) {
                 result = `
                     <ul class="pagination justify-content-center">
                     ${showPage}
                     </ul>
                 `;
-            }
-            else 
-            {
+            } else {
                 result = `
             <ul class="pagination justify-content-center">
                 <li class="page-item">
@@ -63,16 +59,15 @@ module.exports = {
                     </a>
                 </li>
              ${showPage}
-             ${currentPage === page ? 
-                ''
-                :
-             '<li class="page-item"> <a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>'
-            }
+             ${
+                 currentPage === page
+                     ? ''
+                     : '<li class="page-item"> <a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>'
+             }
          </li>
             </ul>`;
             }
-            
         }
         return new Handlebars.SafeString(result);
-    }
+    },
 };

@@ -6,6 +6,10 @@ const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
 const User = new Schema(
     {
+        name: {
+            type: String,
+            required: [true, 'Please enter your name'],
+        },
         email: {
             type: String,
             required: [true, 'Please enter an email'],

@@ -25,8 +25,10 @@ const checkUser = (req, res, next) => {
                 next();
             } else {
                 console.log(decodeToken);
+                console.log('testing!!!')
                 let user = await User.findById(decodeToken.id);
-                res.locals.user = user.email;
+                console.log(user);
+                res.locals.user = user.name;
                 next();
             }
         });

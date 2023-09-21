@@ -1,4 +1,5 @@
-const Course = require('../models/Course');
+// const Course = require('../models/Course');
+const query = require('../../config/db');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
@@ -10,7 +11,7 @@ const createToken = (id) => {
 };
 
 const handleError = (err) => {
-    let errors = { email: '', password: '' };
+    let errors = { name: '', email: '', password: '' };
     console.log(err.message);
     //incorrect email
     if (err.message === 'Incorrect email') {
@@ -33,13 +34,22 @@ const handleError = (err) => {
 };
 class SiteController {
     async home(req, res, next) {
-        console.log(req.query);
-        const PAGE_SIZE = 8; 
-        const page = req.query.page ? parseInt(req.query.page) : 1;
+        // console.log(req.query);
+        // const PAGE_SIZE = 8;
+        // const page = req.query.page ? parseInt(req.query.page) : 1;
         try {
-            const countDocument = await Course.count({});
-            const courses = await Course.find({}).skip((page-1) * PAGE_SIZE).limit(PAGE_SIZE).lean();
-            res.render('home', { courses, count:countDocument, currentPage: page });
+            const  data  =  await query('SELECT  * FROM course');
+            res.json(data);
+            // const countDocument = await Course.count({});
+            // const courses = await Course.find({})
+            //     .skip((page - 1) * PAGE_SIZE)
+            //     .limit(PAGE_SIZE)
+            //     .lean();
+            // res.render('home', {
+            //     courses,
+            //     count: countDocument,
+            //     currentPage: page,
+            // });
         } catch (error) {
             next(error);
         }
@@ -49,8 +59,8 @@ class SiteController {
     }
     async signup(req, res, next) {
         try {
-            const { email, password } = req.body;
-            const user = await User.create({ email, password });
+            const { name, email, password } = req.body;
+            const user = await User.create({ name, email, password });
             const token = createToken(user._id);
             console.log(token);
             res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
@@ -79,10 +89,9 @@ class SiteController {
     loginView(req, res, next) {
         res.render('user/login', { layout: 'author' });
     }
-    logout(req, res, next)
-    {
-        res.cookie('jwt', '', {maxAge:1});
-        res.redirect('/');
+    logout(req, res, next) {
+        res.cookie('jwt', '', { maxAge: 1 });
+        res.redirect('/login');
     }
 }
 

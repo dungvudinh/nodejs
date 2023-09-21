@@ -1,4 +1,4 @@
-<div class="content col-3">
+{{!-- <div class="content col-3">
   <h3>Đăng nhập</h3>
     <form class="login-form" method="POST">
   <div class="mb-3">
@@ -14,12 +14,86 @@
   
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>
+</div> --}}
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form method="POST" class="signup-form">
+			<h1>Create Account</h1>
+			<div class="social-container">
+				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<span>or use your email for registration</span>
+			<input type="text" placeholder="Name" name="signupName"/>
+      <span class="signup-name_message text-danger"></span>
+			<input type="email" placeholder="Email" name="signupEmail"/>
+      <span class="signup-email_message text-danger">
+      </span>
+			<input type="password" placeholder="Password" name="signupPassword"/>
+      <span class="signup-password_message text-danger">
+      </span>
+			<button type="submit">Sign Up</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="#" class="login-form" method="POST">
+			<h1>Sign in</h1>
+			<div class="social-container">
+				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<span>or use your account</span>
+			<input type="email" placeholder="Email" name="loginEmail"/>
+      <span class="login-email_message text-danger"></span>
+			<input type="password" placeholder="Password" name="loginPassword"/>
+       <span class="login-password_message text-danger"></span>
+			<a href="#">Forgot your password?</a>
+			<button type="submit">Sign In</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Welcome Back!</h1>
+				<p>To keep connected with us please login with your personal info</p>
+				<button class="ghost" id="signIn">Sign In</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Hello, Friend!</h1>
+				<p>Enter your personal details and start journey with us</p>
+				<button class="ghost" id="signUp">Sign Up</button>
+			</div>
+		</div>
+	</div>  
 </div>
 
+<footer>
+	<p>
+		Created with <i class="fa fa-heart"></i> by
+		<a target="_blank" href="https://florin-pop.com">Florin Pop</a>
+		- Read how I created this and how you can join the challenge
+		<a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+	</p>
+</footer>
 <script>
+  //handle css
+      const signUpButton = document.getElementById('signUp');
+    const signInButton = document.getElementById('signIn');
+    const container = document.getElementById('container');
+
+    signUpButton.addEventListener('click', () => {
+      container.classList.add("right-panel-active");
+    });
+
+    signInButton.addEventListener('click', () => {
+      container.classList.remove("right-panel-active");
+    });
+  //submit logic login
   const form = document.querySelector('.login-form');
-  const EmailMsg = document.querySelector('.email-message');
-  const PassMsg = document.querySelector('.password-message');
+  const EmailMsg = document.querySelector('.login-email_message');
+  const PassMsg = document.querySelector('.login-password_message');
 
   form.addEventListener('submit', async (e)=>
   {
@@ -27,8 +101,8 @@
     PassMsg.textContent = '';
 
     e.preventDefault();
-    const email = form.email.value;
-    const password = form.password.value;
+    const email = form.loginEmail.value;
+    const password = form.loginPassword.value;
     try 
     {
       const res  = await fetch('/login', {
@@ -42,6 +116,42 @@
       {
         EmailMsg.textContent = data.errors.email;
         PassMsg.textContent = data.errors.password;
+      }
+      if(data.user)
+        location.assign('/');
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+  })
+  //submit logic signup
+  const signupForm = document.querySelector('.signup-form');
+  const SignupNameMsg = document.querySelector('.signup-name_message');
+  const SignupEmailMsg = document.querySelector('.signup-email_message');
+  const SignupPassMsg = document.querySelector('.signup-password_message');
+  signupForm.addEventListener('submit', async (e)=>{
+    SignupNameMsg.textContent = '';
+    SignupEmailMsg.textContent = '';
+    SignupPassMsg.textContent = '';
+    e.preventDefault();
+    const name = signupForm.signupName.value;
+    const email = signupForm.signupEmail.value;
+    const password = signupForm.signupPassword.value;
+    try 
+    {
+      const res = await fetch('/signup',{
+        method:'POST', 
+        body:JSON.stringify({name, email, password}), 
+        headers:{'Content-Type': 'application/json'}
+      })
+      const data = await res.json();
+      console.log(data);
+      if(data.errors)
+      {
+        SignupNameMsg.textContent = data.errors.name;
+        SignupEmailMsg.textContent = data.errors.email;
+        SignupPassMsg.textContent = data.errors.password;
       }
       if(data.user)
         location.assign('/');

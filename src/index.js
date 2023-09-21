@@ -11,7 +11,7 @@ const sortMiddleware = require('./app/middlewares/sortMiddleware');
 const cookieParser = require('cookie-parser');
 const { checkUser } = require('./app/middlewares/authMiddleware');
 
-db.connect();
+// db.connect();
 app.use(morgan('combined'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

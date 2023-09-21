@@ -1,5 +1,8 @@
 // importing core styling file
-
+body {
+    display: flex;
+    flex-direction: row;
+}
 ul {
     list-style-type: none;
 }
@@ -31,7 +34,17 @@ li {
         display: flex;
     }
 }
-// .delete-item_selected
-// {
-//     visibility:hidden;
-// }
+//sidebar
+.nav-item {
+    .nav-link {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        transition: all 0.3s ease;
+    }
+
+    ion-icon {
+        margin-right: 10px;
+        font-size: 1.7rem;
+    }
+}

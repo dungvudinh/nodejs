@@ -3,14 +3,15 @@ const morgan = require('morgan');
 const { engine } = require('express-handlebars');
 const path = require('path');
 const app = express();
+const dotenv = require('dotenv');
+
 const port = 3001;
 const route = require('./routes');
 const db = require('./config/db');
 const methodOverride = require('method-override');
 const sortMiddleware = require('./app/middlewares/sortMiddleware');
 const cookieParser = require('cookie-parser');
-const { checkUser } = require('./app/middlewares/authMiddleware');
-
+dotenv.config({path:'./.env'})
 // db.connect();
 app.use(morgan('combined'));
 app.use(express.urlencoded({ extended: true }));

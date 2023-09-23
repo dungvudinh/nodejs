@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+// const User = require('../models/User');
+const query = require('../../config/db/backend');
 const requireAuth = (req, res, next) => {
     const token = req.cookies.jwt;
     if (token) {
@@ -24,10 +25,7 @@ const checkUser = (req, res, next) => {
                 res.locals.user = null;
                 next();
             } else {
-                console.log(decodeToken);
-                console.log('testing!!!')
-                let user = await User.findById(decodeToken.id);
-                console.log(user);
+                let [user] = await query("SELECT * FROM account WHERE account_id = ?" , [decodeToken.id]);
                 res.locals.user = user.name;
                 next();
             }
